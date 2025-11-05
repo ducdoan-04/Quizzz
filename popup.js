@@ -8,7 +8,7 @@ const apiKeyInput = document.getElementById('apiKeyInput');
 let GEMINI_API_KEY = '';
 let currentImage = null;
 
-// 🔹 Tải key khi mở popup
+// Tải key
 chrome.storage.sync.get(['geminiApiKey'], (result) => {
   if (result.geminiApiKey) {
     GEMINI_API_KEY = result.geminiApiKey;
@@ -16,7 +16,7 @@ chrome.storage.sync.get(['geminiApiKey'], (result) => {
   }
 });
 
-// 🔹 Lưu key
+// Lưu key
 saveKeyBtn.addEventListener('click', () => {
   const key = apiKeyInput.value.trim();
   if (!key.startsWith('AIza')) {
@@ -29,12 +29,7 @@ saveKeyBtn.addEventListener('click', () => {
   });
 });
 
-// 🔹 Chụp ảnh
-screenshotBtn.addEventListener('click', () => {
-  chrome.runtime.sendMessage({ action: 'captureScreenshot' });
-});
-
-// 🔹 Gửi câu hỏi
+// Gửi câu hỏi
 askBtn.addEventListener('click', async () => {
   if (!GEMINI_API_KEY) {
     alert('⚠️ Vui lòng nhập và lưu API key trước khi hỏi.');
@@ -57,7 +52,6 @@ askBtn.addEventListener('click', async () => {
   }
 });
 
-// 🔹 Nhận ảnh chụp từ background
 chrome.runtime.onMessage.addListener((request) => {
   if (request.action === 'screenshotCaptured') {
     currentImage = request.dataUrl;
@@ -65,7 +59,6 @@ chrome.runtime.onMessage.addListener((request) => {
   }
 });
 
-// 🔹 Gửi văn bản
 async function askTextOnly(text) {
   try {
     const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
@@ -82,12 +75,13 @@ async function askTextOnly(text) {
   }
 }
 
-// 🔹 Phân tích ảnh
 async function analyzeImage(imageBase64, userText = '') {
-  const base64Data = imageBase64.split(',')[1];
-  const prompt = userText
-    ? `Giải thích hoặc giải bài tập trong ảnh. Câu hỏi: "${userText}".`
-    : `Phân tích và giải bài tập trong ảnh, trình bày chi tiết, có công thức nếu cần.`;
+    const base64Data = imageBase64.split(',')[1];
+    const prompt = userText
+    ? `Dựa vào nội dung trong ảnh, trả lời thật ngắn gọn cho câu hỏi: "${userText}". 
+        Chỉ ghi đáp án đúng hoặc kết quả cuối cùng, KHÔNG giải thích hay trình bày bước làm.`
+    : `Dựa vào ảnh bài tập, hãy đưa ra đáp án cuối cùng ngắn gọn nhất có thể, 
+        KHÔNG giải thích, KHÔNG trình bày chi tiết.`;
 
   try {
     const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
@@ -112,7 +106,6 @@ async function analyzeImage(imageBase64, userText = '') {
   }
 }
 
-// 🔹 Hiển thị kết quả
 function showResult(text, isError = false, img = null) {
   let html = '';
   if (img) html += `<img src="${img}" style="max-width:100%; border-radius:6px;">`;
