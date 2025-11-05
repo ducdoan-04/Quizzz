@@ -20,3 +20,18 @@ chrome.runtime.onMessage.addListener((request) => {
     });
   }
 });
+
+// Mở popup khi nhận tin từ nút nổi Gemini
+chrome.runtime.onMessage.addListener((req) => {
+  if (req.action === 'openGeminiPopup') {
+    // Gọi chrome.action.openPopup() để mở popup.html của extension
+    if (chrome.action && typeof chrome.action.openPopup === 'function') {
+      chrome.action.openPopup();
+    } else if (chrome.browserAction && typeof chrome.browserAction.openPopup === 'function') {
+      // fallback cho manifest v2 / older APIs (harmless if not present)
+      chrome.browserAction.openPopup();
+    } else {
+      console.warn('openPopup API không khả dụng trong runtime này.');
+    }
+  }
+});
