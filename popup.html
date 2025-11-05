@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Trợ lý bài tập Gemini</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 340px;
+      padding: 16px;
+      font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+    }
+    h3 { color: #1a73e8; text-align: center; margin-bottom: 10px; }
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+    #screenshotBtn, #askBtn { background: #1a73e8; color: white; }
+    #saveKeyBtn { background: #34a853; color: white; }
+    textarea, input {
+      width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px;
+      margin-top: 6px; font-size: 13px;
+    }
+    #result {
+      background: #f8f9fa; border-radius: 6px; margin-top: 10px;
+      padding: 10px; max-height: 280px; overflow-y: auto; font-size: 13px;
+    }
+    .loading { color: #1a73e8; font-style: italic; }
+  </style>
+</head>
+<body>
+  <h3>Trợ lý bài tập Gemini</h3>
+  <input id="apiKeyInput" type="text" placeholder="Nhập API key từ Google AI Studio...">
+  <button id="saveKeyBtn">💾 Lưu API key</button>
+  <button id="screenshotBtn">📸 Chụp ảnh màn hình (Ctrl+E)</button>
+  <textarea id="queryInput" rows="3" placeholder="Nhập câu hỏi hoặc để trống để phân tích ảnh..."></textarea>
+  <button id="askBtn">🧠 Hỏi Gemini</button>
+  <div id="result"></div>
+  <script src="popup.js"></script>
+</body>
+</html>
